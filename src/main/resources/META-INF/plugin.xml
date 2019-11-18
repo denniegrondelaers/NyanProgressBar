@@ -1,0 +1,34 @@
+<idea-plugin>
+  <id>be.freyja</id>
+  <name>Sonic Progress Bar</name>
+  <version>1.0</version>
+  <idea-version since-build="192"/>
+  <vendor email="dennie.grondelaers@gmail.com">Dennie Grondelaers</vendor>
+
+  <description><![CDATA[
+      A Sonic the Hedgehog progress bar for IntelliJ IDEA and other JetBrains IDEs.
+    ]]></description>
+
+  <change-notes><![CDATA[
+      <em>1.0 Fork from Nyan Progress Bar 1.13 and name and images changed</em><br>
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+  <application-components>
+    <component>
+      <implementation-class>SonicApplicationComponent</implementation-class>
+    </component>
+  </application-components>
+</idea-plugin>

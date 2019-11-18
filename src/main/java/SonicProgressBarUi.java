@@ -2,6 +2,7 @@ import com.intellij.openapi.ui.GraphicsConfig;
 import com.intellij.openapi.util.ScalableIcon;
 import com.intellij.ui.Gray;
 import com.intellij.ui.JBColor;
+import com.intellij.ui.scale.JBUIScale;
 import com.intellij.util.ui.GraphicsUtil;
 import com.intellij.util.ui.JBUI;
 import com.intellij.util.ui.UIUtil;
@@ -15,7 +16,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.*;
 
-public class NyanProgressBarUi extends BasicProgressBarUI {
+public class SonicProgressBarUi extends BasicProgressBarUI {
     private static final float ONE_OVER_SEVEN = 1f / 7;
     private static final Color VIOLET = new Color(90, 0, 157);
 
@@ -23,7 +24,7 @@ public class NyanProgressBarUi extends BasicProgressBarUI {
     @SuppressWarnings({"MethodOverridesStaticMethodOfSuperclass", "UnusedDeclaration"})
     public static ComponentUI createUI(JComponent c) {
         c.setBorder(JBUI.Borders.empty().asUIResource());
-        return new NyanProgressBarUi();
+        return new SonicProgressBarUi();
     }
 
     @Override
@@ -70,11 +71,11 @@ public class NyanProgressBarUi extends BasicProgressBarUI {
         g.setColor(new JBColor(Gray._240.withAlpha(50), Gray._128.withAlpha(50)));
         int w = c.getWidth();
         int h = c.getPreferredSize().height;
-        if (!isEven(c.getHeight() - h)) h++;
+        h++;
 
         LinearGradientPaint baseRainbowPaint = new LinearGradientPaint(0, JBUI.scale(2), 0, h - JBUI.scale(6),
                 new float[]{ONE_OVER_SEVEN * 1, ONE_OVER_SEVEN * 2, ONE_OVER_SEVEN * 3, ONE_OVER_SEVEN * 4, ONE_OVER_SEVEN * 5, ONE_OVER_SEVEN * 6, ONE_OVER_SEVEN * 7},
-                new Color[]{Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.cyan, Color.blue, VIOLET});
+                new Color[]{JBColor.BLUE, JBColor.BLUE, JBColor.BLUE, JBColor.BLUE, JBColor.BLUE, JBColor.YELLOW, JBColor.YELLOW});
 
         g.setPaint(baseRainbowPaint);
 
@@ -84,34 +85,14 @@ public class NyanProgressBarUi extends BasicProgressBarUI {
         g.setColor(new JBColor(Gray._165.withAlpha(50), Gray._88.withAlpha(50)));
         final GraphicsConfig config = GraphicsUtil.setupAAPainting(g);
         g.translate(0, (c.getHeight() - h) / 2);
-        int x = -offset;
-
-
-//        LinearGradientPaint baseRainbowPaint = new LinearGradientPaint(0, JBUI.scale(2), 0, h - JBUI.scale(6),
-//                new float[]{ONE_OVER_SEVEN * 1, ONE_OVER_SEVEN * 2, ONE_OVER_SEVEN * 3, ONE_OVER_SEVEN * 4, ONE_OVER_SEVEN * 5, ONE_OVER_SEVEN * 6, ONE_OVER_SEVEN * 7},
-//                new Color[]{Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.cyan, Color.blue, VIOLET});
 
         Paint old = g.getPaint();
         g.setPaint(baseRainbowPaint);
 
-        final float R = JBUI.scale(8f);
-        final float R2 = JBUI.scale(9f);
+        final float R = JBUIScale.scale(8f);
+        final float R2 = JBUIScale.scale(9f);
         final Area containingRoundRect = new Area(new RoundRectangle2D.Float(1f, 1f, w - 2f, h - 2f, R, R));
-//        while (x < Math.max(c.getWidth(), c.getHeight())) {
-//            Path2D.Double path = new Path2D.Double();
-//            float ww = getPeriodLength() / 2f;
-//            path.moveTo(x, 0);
-//            path.lineTo(x+ww, 0);
-//            path.lineTo(x+ww - h / 2, h);
-//            path.lineTo(x-h / 2, h);
-//            path.lineTo(x, 0);
-//            path.closePath();
-//
-//            final Area area = new Area(path);
-//            area.intersect(containingRoundRect);
-            g.fill(containingRoundRect);
-//            x+= getPeriodLength();
-//        }
+        g.fill(containingRoundRect);
         g.setPaint(old);
         offset = (offset + 1) % getPeriodLength();
         offset2 += velocity;
@@ -122,11 +103,11 @@ public class NyanProgressBarUi extends BasicProgressBarUI {
             offset2 = w - JBUI.scale(15);
             velocity = -1;
         }
-//        offset2 = (offset2 + 1) % (w - 3);
+
         Area area = new Area(new Rectangle2D.Float(0, 0, w, h));
         area.subtract(new Area(new RoundRectangle2D.Float(1f, 1f, w - 2f, h - 2f, R, R)));
         g.setPaint(Gray._128);
-//        g.setPaint(baseRainbowPaint);
+
         if (c.isOpaque()) {
             g.fill(area);
         }
@@ -136,17 +117,11 @@ public class NyanProgressBarUi extends BasicProgressBarUI {
         Container parent = c.getParent();
         Color background = parent != null ? parent.getBackground() : UIUtil.getPanelBackground();
         g.setPaint(background);
-//        g.setPaint(baseRainbowPaint);
         if (c.isOpaque()) {
             g.fill(area);
         }
 
-//        g.setPaint(baseRainbowPaint);
-
-        Icon scaledIcon = velocity > 0 ? ((ScalableIcon) NyanIcons.CAT_ICON) : ((ScalableIcon) NyanIcons.RCAT_ICON) ;
-//        if (velocity < 0) {
-//            scaledIcon = new ReflectedIcon(scaledIcon);
-//        }
+        Icon scaledIcon = velocity > 0 ? ((ScalableIcon) SonicIcons.SONIC_ICON) : ((ScalableIcon) SonicIcons.RSONIC_ICON) ;
         scaledIcon.paintIcon(progressBar, g, offset2 - JBUI.scale(10), -JBUI.scale(6));
 
         g.draw(new RoundRectangle2D.Float(1f, 1f, w - 2f - 1f, h - 2f -1f, R, R));
@@ -178,7 +153,7 @@ public class NyanProgressBarUi extends BasicProgressBarUI {
         Insets b = progressBar.getInsets(); // area for border
         int w = progressBar.getWidth();
         int h = progressBar.getPreferredSize().height;
-        if (!isEven(c.getHeight() - h)) h++;
+        h++;
 
         int barRectWidth = w - (b.right + b.left);
         int barRectHeight = h - (b.top + b.bottom);
@@ -198,22 +173,21 @@ public class NyanProgressBarUi extends BasicProgressBarUI {
             g.fillRect(0, 0, w, h);
         }
 
-        final float R = JBUI.scale(8f);
-        final float R2 = JBUI.scale(9f);
-        final float off = JBUI.scale(1f);
+        final float R = JBUIScale.scale(8f);
+        final float R2 = JBUIScale.scale(9f);
+        final float off = JBUIScale.scale(1f);
 
         g2.translate(0, (c.getHeight() - h)/2);
         g2.setColor(progressBar.getForeground());
         g2.fill(new RoundRectangle2D.Float(0, 0, w - off, h - off, R2, R2));
         g2.setColor(background);
         g2.fill(new RoundRectangle2D.Float(off, off, w - 2f*off - off, h - 2f*off - off, R, R));
-//        g2.setColor(progressBar.getForeground());
         g2.setPaint(new LinearGradientPaint(0, JBUI.scale(2), 0, h - JBUI.scale(6),
                 new float[]{ONE_OVER_SEVEN * 1, ONE_OVER_SEVEN * 2, ONE_OVER_SEVEN * 3, ONE_OVER_SEVEN * 4, ONE_OVER_SEVEN * 5, ONE_OVER_SEVEN * 6, ONE_OVER_SEVEN * 7},
-                new Color[]{Color.RED, Color.ORANGE, Color.YELLOW, Color.GREEN, Color.cyan, Color.blue, VIOLET}));
+                new Color[]{JBColor.BLUE, JBColor.BLUE, JBColor.BLUE, JBColor.BLUE, JBColor.BLUE, JBColor.YELLOW, JBColor.YELLOW}));
 
-        NyanIcons.CAT_ICON.paintIcon(progressBar, g2, amountFull - JBUI.scale(10), -JBUI.scale(6));
-        g2.fill(new RoundRectangle2D.Float(2f*off,2f*off, amountFull - JBUI.scale(5f), h - JBUI.scale(5f), JBUI.scale(7f), JBUI.scale(7f)));
+        SonicIcons.SONIC_ICON.paintIcon(progressBar, g2, amountFull - JBUI.scale(10), -JBUI.scale(6));
+        g2.fill(new RoundRectangle2D.Float(2f*off,2f*off, amountFull - JBUIScale.scale(5f), h - JBUIScale.scale(5f), JBUIScale.scale(7f), JBUIScale.scale(7f)));
         g2.translate(0, -(c.getHeight() - h)/2);
 
         // Deal with possible text painting
@@ -269,10 +243,6 @@ public class NyanProgressBarUi extends BasicProgressBarUI {
 
     private int getPeriodLength() {
         return JBUI.scale(16);
-    }
-
-    private static boolean isEven(int value) {
-        return value % 2 == 0;
     }
 }
 
